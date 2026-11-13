@@ -1,0 +1,14 @@
+{
+  "id":"./",
+  "name":"iBox TV",
+  "short_name":"iBox",
+  "description":"Ekran iBox i test klawiszy pilota Samsung.",
+  "lang":"pl-PL",
+  "start_url":"./index.html",
+  "scope":"./",
+  "display":"standalone",
+  "orientation":"landscape",
+  "background_color":"#080d14",
+  "theme_color":"#080d14",
+  "icons":[{"src":"icon.svg","sizes":"any","type":"image/svg+xml","purpose":"any maskable"}]
+}
