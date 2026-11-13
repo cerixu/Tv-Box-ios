@@ -3,7 +3,7 @@
 **Repo:** https://github.com/cerixu/Tv-Box-ios
 
 ## What this build does
-- Native iOS app: iPhone touch remote + separate full-screen TV view when iOS 27 provides an external display scene over AirPlay or cable.
+- Native iOS app: iPhone touch remote + separate TV interface when iOS supplies an external-display scene over AirPlay or cable.
 - Six TV launcher tiles: Movies, Series, YouTube, Music, Photos, Apps. These are navigation placeholders, not finished streaming integrations.
 - Samsung TV browser diagnostic page to test whether its browser forwards IR remote keys to JavaScript.
 - Offline-capable TV web page (Service Worker + cache fallback).
@@ -37,10 +37,11 @@ If the browser does not show the key events, stop testing IR. Use the iPhone's o
 1. Install iBox on the iPhone through Signulous.
 2. Connect iPhone and Samsung to the same Wi-Fi.
 3. Start iBox on the iPhone.
-4. Open Control Center → Screen Mirroring → select the Samsung TV.
-5. The iPhone remains the controller. If iOS makes the registered external-display accessory available for that AirPlay session, iBox renders its separate TV interface on the Samsung.
+4. Open Control Center → Screen Mirroring → select the Samsung.
+5. The iPhone remains the controller. The app uses the external-display scene API available to the SDK used for the build; verify separate TV rendering on the actual iPhone/TV pair.
 
 ## Technical notes
-- iOS 27 external display path uses `UIViewController.registerSceneAccessory` with `UISceneAccessory.externalNonInteractive`.
-- AirPlay support and the external-display accessory must be verified on the physical TV/phone pair; simulator or CI cannot prove the Samsung connection.
-- This is an early launcher prototype, not tvOS, not a full streaming box yet. Media playback, provider integrations, DRM, and app deep links are later stages.
+- The GitHub runner currently provides Xcode 26.6 / iOS 26.5 SDK. This project therefore builds against the iOS 26 SDK and uses the external-display scene role that was automatically offered before apps were built with the iOS 27 SDK. The minimum OS is 26.0, so your iOS 27.2.1 device is compatible.
+- Apple changed the external-display API in apps built with the iOS 27 SDK to require registering a `UISceneAccessory`. We cannot compile against that new API until a runner with the iOS 27 SDK is available.
+- AirPlay external-display behavior must be verified on the physical TV/phone pair; CI cannot prove the Samsung connection.
+- This is an early launcher prototype, not tvOS or a full streaming box yet. Media playback, provider integrations, DRM, and app deep links are later stages.
