@@ -3,10 +3,12 @@ name: Build iBox unsigned IPA
 on:
   workflow_dispatch:
   push:
-    paths:
-      - 'iBox-source.zip'
-      - '.github/workflows/build-unsigned-ipa.yml'
     branches: [main]
+    paths:
+      - 'Sources/**'
+      - 'Supporting/**'
+      - 'project.yml'
+      - '.github/workflows/build-unsigned-ipa.yml'
 
 permissions:
   contents: read
@@ -18,13 +20,7 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
-      - name: Unpack project source
-        run: |
-          unzip -q iBox-source.zip -d source
-          test -f source/ibox-source/project.yml
-          test -f source/ibox-source/Sources/App/AppDelegate.swift
-
-      - name: Show toolchain
+      - name: Show Apple toolchain
         run: |
           xcodebuild -version
           xcrun --sdk iphoneos --show-sdk-version
@@ -33,11 +29,9 @@ jobs:
         run: brew install xcodegen
 
       - name: Generate Xcode project
-        working-directory: source/ibox-source
         run: xcodegen generate
 
       - name: Build unsigned iOS app
-        working-directory: source/ibox-source
         run: |
           xcodebuild \
             -project iBox.xcodeproj \
@@ -50,7 +44,6 @@ jobs:
             build
 
       - name: Package unsigned IPA
-        working-directory: source/ibox-source
         run: |
           APP_PATH="$RUNNER_TEMP/ibox-derived/Build/Products/Release-iphoneos/iBox.app"
           test -d "$APP_PATH"
