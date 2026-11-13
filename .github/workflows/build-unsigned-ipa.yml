@@ -1,0 +1,68 @@
+name: Build iBox unsigned IPA
+
+on:
+  workflow_dispatch:
+  push:
+    paths:
+      - 'iBox-source.zip'
+      - '.github/workflows/build-unsigned-ipa.yml'
+    branches: [main]
+
+permissions:
+  contents: read
+
+jobs:
+  build:
+    runs-on: macos-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Unpack project source
+        run: |
+          unzip -q iBox-source.zip -d source
+          test -f source/ibox-source/project.yml
+          test -f source/ibox-source/Sources/App/AppDelegate.swift
+
+      - name: Show toolchain
+        run: |
+          xcodebuild -version
+          xcrun --sdk iphoneos --show-sdk-version
+
+      - name: Install XcodeGen
+        run: brew install xcodegen
+
+      - name: Generate Xcode project
+        working-directory: source/ibox-source
+        run: xcodegen generate
+
+      - name: Build unsigned iOS app
+        working-directory: source/ibox-source
+        run: |
+          xcodebuild \
+            -project iBox.xcodeproj \
+            -scheme iBox \
+            -sdk iphoneos \
+            -configuration Release \
+            -destination 'generic/platform=iOS' \
+            -derivedDataPath "$RUNNER_TEMP/ibox-derived" \
+            CODE_SIGNING_ALLOWED=NO \
+            build
+
+      - name: Package unsigned IPA
+        working-directory: source/ibox-source
+        run: |
+          APP_PATH="$RUNNER_TEMP/ibox-derived/Build/Products/Release-iphoneos/iBox.app"
+          test -d "$APP_PATH"
+          mkdir -p "$RUNNER_TEMP/ipa/Payload"
+          cp -R "$APP_PATH" "$RUNNER_TEMP/ipa/Payload/"
+          cd "$RUNNER_TEMP/ipa"
+          /usr/bin/zip -qry "$GITHUB_WORKSPACE/iBox-unsigned.ipa" Payload
+
+      - name: Upload IPA artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: iBox-unsigned-ipa
+          path: iBox-unsigned.ipa
+          if-no-files-found: error
+          retention-days: 14
