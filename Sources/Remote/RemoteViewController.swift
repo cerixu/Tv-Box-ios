@@ -1,7 +1,6 @@
 import UIKit
 
 final class RemoteViewController: UIViewController {
-    private var displayRegistration: UISceneAccessoryRegistration?
     private let status = UILabel()
     override var canBecomeFirstResponder: Bool { true }
 
@@ -9,14 +8,14 @@ final class RemoteViewController: UIViewController {
         super.viewDidLoad()
         view.backgroundColor = UIColor(red: 0.035, green: 0.047, blue: 0.067, alpha: 1)
         buildUI()
-        NotificationCenter.default.addObserver(self, selector: #selector(refresh), name: TVState.didChange, object: nil)
-        registerExternalDisplay()
+        NotificationCenter.default.addObserver(self, selector: #selector(refreshStatus), name: UIScreen.didConnectNotification, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(refreshStatus), name: UIScreen.didDisconnectNotification, object: nil)
     }
 
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
         becomeFirstResponder()
-        refresh()
+        refreshStatus()
     }
 
     deinit { NotificationCenter.default.removeObserver(self) }
@@ -82,29 +81,21 @@ final class RemoteViewController: UIViewController {
         return button
     }
 
-    private func registerExternalDisplay() {
-        let config = UISceneConfiguration()
-        config.delegateClass = ExternalDisplaySceneDelegate.self
-        let accessory = UISceneAccessory.externalNonInteractive(sceneConfiguration: config)
-        displayRegistration = registerSceneAccessory(accessory)
-    }
-
-    @objc private func refresh() {
-        let available = displayRegistration?.isAvailable == true
-        status.text = available
-            ? "Ekran zewnętrzny dostępny. Wybierz kafelek poniżej."
+    @objc private func refreshStatus() {
+        status.text = UIScreen.screens.count > 1
+            ? "Wykryto dodatkowy ekran. iBox powinien wyświetlić osobny interfejs TV."
             : "Czekam na ekran AirPlay. W Centrum sterowania wybierz Klonowanie ekranu → Samsung."
     }
 
     override var keyCommands: [UIKeyCommand]? {
         [
-            UIKeyCommand(input: UIKeyCommand.inputUpArrow, action: #selector(up)),
-            UIKeyCommand(input: UIKeyCommand.inputDownArrow, action: #selector(down)),
-            UIKeyCommand(input: UIKeyCommand.inputLeftArrow, action: #selector(left)),
-            UIKeyCommand(input: UIKeyCommand.inputRightArrow, action: #selector(right)),
-            UIKeyCommand(input: "\r", action: #selector(select)),
-            UIKeyCommand(input: UIKeyCommand.inputEscape, action: #selector(back)),
-            UIKeyCommand(input: "h", action: #selector(home))
+            UIKeyCommand(action: #selector(up), input: UIKeyCommand.inputUpArrow),
+            UIKeyCommand(action: #selector(down), input: UIKeyCommand.inputDownArrow),
+            UIKeyCommand(action: #selector(left), input: UIKeyCommand.inputLeftArrow),
+            UIKeyCommand(action: #selector(right), input: UIKeyCommand.inputRightArrow),
+            UIKeyCommand(action: #selector(select), input: "\r"),
+            UIKeyCommand(action: #selector(back), input: UIKeyCommand.inputEscape),
+            UIKeyCommand(action: #selector(home), input: "h")
         ]
     }
     @objc private func up() { TVState.shared.move(0, -1) }
