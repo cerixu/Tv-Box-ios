@@ -93,7 +93,7 @@ final class RemoteViewController: UIViewController {
             UIKeyCommand(action: #selector(down), input: UIKeyCommand.inputDownArrow),
             UIKeyCommand(action: #selector(left), input: UIKeyCommand.inputLeftArrow),
             UIKeyCommand(action: #selector(right), input: UIKeyCommand.inputRightArrow),
-            UIKeyCommand(action: #selector(select), input: "\r"),
+            UIKeyCommand(action: #selector(selectItem), input: "\r"),
             UIKeyCommand(action: #selector(back), input: UIKeyCommand.inputEscape),
             UIKeyCommand(action: #selector(home), input: "h")
         ]
@@ -102,7 +102,7 @@ final class RemoteViewController: UIViewController {
     @objc private func down() { TVState.shared.move(0, 1) }
     @objc private func left() { TVState.shared.move(-1, 0) }
     @objc private func right() { TVState.shared.move(1, 0) }
-    @objc private func select() { TVState.shared.select() }
+    @objc private func selectItem() { TVState.shared.select() }
     @objc private func back() { TVState.shared.back() }
     @objc private func home() { TVState.shared.home() }
 }
