@@ -1,0 +1,25 @@
+<!doctype html>
+<html lang="pl">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#080d14"><meta name="apple-mobile-web-app-capable" content="yes">
+<link rel="manifest" href="./manifest.webmanifest"><link rel="stylesheet" href="./styles.css">
+<title>iBox TV — test pilota</title>
+</head>
+<body>
+<main class="shell">
+<header><div class="brand">iBox <small>TV HUB</small></div><div class="status">TEST PILOTA IR</div></header>
+<section class="intro"><div><p class="eyebrow">SAMSUNG TV · BROWSER CHECK</p><h1>Twoje centrum rozrywki.</h1><p class="muted">Naciśnij przyciski na pilocie. Jeśli przeglądarka odbiera klawisze, zobaczysz je poniżej.</p></div><aside><span>OSTATNI KLAWISZ</span><strong id="lastKey">OCZEKIWANIE</strong><small id="keyCode">—</small></aside></section>
+<section class="tiles" id="tiles">
+<button class="tile selected" data-title="Filmy" data-copy="Biblioteka filmów — moduł w przygotowaniu."><b>▶</b><strong>Filmy</strong><small>Twoja biblioteka</small></button>
+<button class="tile" data-title="Seriale" data-copy="Kontynuuj oglądanie — moduł w przygotowaniu."><b>▣</b><strong>Seriale</strong><small>Oglądaj dalej</small></button>
+<button class="tile" data-title="YouTube" data-copy="YouTube otworzymy przez kompatybilną aplikację lub stronę."><b>▷</b><strong>YouTube</strong><small>Wideo online</small></button>
+<button class="tile" data-title="Muzyka" data-copy="Muzyka — moduł w przygotowaniu."><b>♫</b><strong>Muzyka</strong><small>Albumy i playlisty</small></button>
+<button class="tile" data-title="Zdjęcia" data-copy="Zdjęcia — moduł w przygotowaniu."><b>▧</b><strong>Zdjęcia</strong><small>Twoje wspomnienia</small></button>
+<button class="tile" data-title="Aplikacje" data-copy="Centrum aplikacji — moduł w przygotowaniu."><b>▦</b><strong>Aplikacje</strong><small>Twoje aplikacje</small></button>
+</section>
+<section id="detail" hidden><p class="eyebrow">iBOX</p><h2 id="detailTitle"></h2><p id="detailCopy"></p><small>Wciśnij WSTECZ, aby wrócić.</small></section>
+<footer><span>STRZAŁKI · OK · BACK</span><span id="result">Czekam na sygnał z pilota…</span></footer>
+</main>
+<script src="./app.js" defer></script>
+</body></html>
