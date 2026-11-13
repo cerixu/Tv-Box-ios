@@ -1,0 +1,27 @@
+name: iBox
+options:
+  bundleIdPrefix: app.ibox
+  deploymentTarget:
+    iOS: "27.0"
+  createIntermediateGroups: true
+settings:
+  base:
+    SWIFT_VERSION: "6.0"
+    IPHONEOS_DEPLOYMENT_TARGET: "27.0"
+    TARGETED_DEVICE_FAMILY: "1"
+targets:
+  iBox:
+    type: application
+    platform: iOS
+    sources:
+      - path: Sources
+    info:
+      path: Supporting/Info.plist
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: app.ibox.mobile
+        PRODUCT_NAME: iBox
+        INFOPLIST_FILE: Supporting/Info.plist
+        GENERATE_INFOPLIST_FILE: NO
+        CODE_SIGN_STYLE: Manual
+        CODE_SIGNING_ALLOWED: NO
