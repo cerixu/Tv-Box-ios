@@ -3,10 +3,16 @@ name: Deploy iBox TV test to GitHub Pages
 on:
   workflow_dispatch:
   push:
-    paths:
-      - 'iBox-source.zip'
-      - '.github/workflows/deploy-pages.yml'
     branches: [main]
+    paths:
+      - 'index.html'
+      - 'styles.css'
+      - 'app.js'
+      - 'sw.js'
+      - 'manifest.webmanifest'
+      - 'offline.html'
+      - 'icon.svg'
+      - '.github/workflows/deploy-pages.yml'
 
 permissions:
   contents: read
@@ -27,12 +33,10 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
-      - name: Unpack TV web app
+      - name: Prepare site
         run: |
-          unzip -q iBox-source.zip -d source
-          test -f source/ibox-source/tv-web/index.html
           mkdir -p dist
-          cp -R source/ibox-source/tv-web/. dist/
+          cp index.html styles.css app.js sw.js manifest.webmanifest offline.html icon.svg dist/
 
       - name: Configure Pages
         uses: actions/configure-pages@v5
